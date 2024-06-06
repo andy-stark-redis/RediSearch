@@ -68,9 +68,9 @@ jobs:
       - name: Setup common
         run: .install/common_installations.sh ${{ steps.mode.outputs.mode }}
 
-      - name: Install Boost
-        working-directory: .install
-        run: ./install_boost.sh ${{ env.BOOST_VERSION }} ${{ steps.mode.outputs.mode }}
+      # - name: Install Boost
+      #   working-directory: .install
+      #   run: ./install_boost.sh ${{ env.BOOST_VERSION }} ${{ steps.mode.outputs.mode }}
 
       - name: Install llvm & rust
         if: inputs.san == 'addr'
@@ -79,16 +79,14 @@ jobs:
           .install/install_rust.sh
 
       - name: Get Redis
-        if: inputs.get-redis != 'skip getting redis'
         uses: actions/checkout@v3
         with:
           repository: redis/redis
           ref: ${{ inputs.get-redis }}
           path: redis
       - name: Build Redis
-        if: inputs.get-redis != 'skip getting redis'
         working-directory: redis
-        run: ${{ steps.mode.outputs.mode }} make install BUILD_TLS=yes
+        run: ${{ steps.mode.outputs.mode }} make install BUILD_TLS=yes SANIIZER=
 
       - name: Set Artifact Names
         # Artifact names have to be unique, so we base them on the environment.
