@@ -72,6 +72,12 @@ jobs:
         working-directory: .install
         run: ./install_boost.sh ${{ env.BOOST_VERSION }} ${{ steps.mode.outputs.mode }}
 
+      - name: Install llvm & rust
+        if: inputs.san == 'addr'
+        run: |
+          .install/install_llvm.sh
+          .install/install_rust.sh
+
       - name: Get Redis
         if: inputs.get-redis != 'skip getting redis'
         uses: actions/checkout@v3
