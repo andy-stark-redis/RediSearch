@@ -68,15 +68,15 @@ jobs:
       - name: Setup common
         run: .install/common_installations.sh ${{ steps.mode.outputs.mode }}
 
-      # - name: Install Boost
-      #   working-directory: .install
-      #   run: ./install_boost.sh ${{ env.BOOST_VERSION }} ${{ steps.mode.outputs.mode }}
+      - name: Install Boost
+        working-directory: .install
+        run: ./install_boost.sh ${{ env.BOOST_VERSION }} ${{ steps.mode.outputs.mode }}
 
       - name: Install llvm & rust
         if: inputs.san == 'address'
         run: |
-          .install/install_llvm.sh
-          .install/install_rust.sh
+          .install/install_llvm.sh ${{ steps.mode.outputs.mode }}
+          .install/install_rust.sh 
           echo "PATH=$HOME/.cargo/bin:$PATH" >> $GITHUB_ENV
           echo "CC=$(which clang-17)" >> $GITHUB_ENV
           echo "CXX=$(which clang++-17)" >> $GITHUB_ENV
